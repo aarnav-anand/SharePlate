@@ -1,0 +1,425 @@
+/* Modern CSS Reset */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Custom Properties */
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #2c3e50;
+    --accent-color: #e74c3c;
+    --success-color: #2ecc71;
+    --text-color: #2c3e50;
+    --light-gray: #f5f6fa;
+    --border-radius: 12px;
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+/* Modern Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header Styles */
+header {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 1rem 2rem;
+    box-shadow: var(--box-shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+nav {
+    display: flex;
+    gap: 1.5rem;
+}
+
+nav a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+nav a:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Main Content */
+main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* Form Styles */
+form {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+form h2 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--secondary-color);
+}
+
+input, textarea {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: var(--border-radius);
+    font-family: inherit;
+    transition: var(--transition);
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+/* Button Styles */
+button, .button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+}
+
+/* Primary Button */
+button[type="submit"], .primary-button {
+    background: linear-gradient(135deg, var(--primary-color), #357abd);
+    color: white;
+}
+
+/* Secondary Button */
+button[type="button"], .secondary-button {
+    background: linear-gradient(135deg, #6c757d, #5a6268);
+    color: white;
+}
+
+/* Danger Button */
+.danger-button {
+    background: linear-gradient(135deg, var(--accent-color), #c0392b);
+    color: white;
+}
+
+/* Button Hover Effects */
+button:hover, .button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+button[type="submit"]:hover, .primary-button:hover {
+    background: linear-gradient(135deg, #357abd, var(--primary-color));
+}
+
+button[type="button"]:hover, .secondary-button:hover {
+    background: linear-gradient(135deg, #5a6268, #6c757d);
+}
+
+.danger-button:hover {
+    background: linear-gradient(135deg, #c0392b, var(--accent-color));
+}
+
+/* Button Active States */
+button:active, .button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Focus States */
+button:focus, .button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
+}
+
+/* Button Group */
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* Form Submit Button */
+form button[type="submit"] {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+/* Modal Buttons */
+.modal-content button {
+    margin: 0.5rem;
+}
+
+/* Confetti Button */
+.confetti-button {
+    background: linear-gradient(135deg, var(--success-color), #27ae60);
+    color: white;
+}
+
+.confetti-button:hover {
+    background: linear-gradient(135deg, #27ae60, var(--success-color));
+}
+
+/* Post Card Styles */
+.post-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.post-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+}
+
+.post-card h2 {
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+.post-card .address {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.post-card .description {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.post-card .timestamp {
+    color: #666;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.post-card .status {
+    color: #e74c3c;
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+.post-card .view-details {
+    display: inline-block;
+    background: #3498db;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-top: 0.5rem;
+}
+
+.post-card .view-details:hover {
+    background: #2980b9;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: white;
+    margin: 10% auto;
+    padding: 2rem;
+    width: 90%;
+    max-width: 500px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Success Modal Specific Styles */
+.success-message {
+    text-align: center;
+    padding: 2rem;
+}
+
+.success-message h2 {
+    color: var(--success-color);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.success-message p {
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+    margin-bottom: 1.5rem;
+}
+
+/* Edit Button Styles */
+.edit-button {
+    background: linear-gradient(135deg, var(--primary-color), #357abd);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.edit-button::before {
+    content: '✏️';
+    font-size: 1.2rem;
+}
+
+.edit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #357abd, var(--primary-color));
+}
+
+.edit-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.edit-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header {
+        padding: 1rem;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    nav {
+        gap: 0.5rem;
+    }
+
+    nav a {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    form {
+        padding: 1.5rem;
+    }
+
+    .modal-content {
+        margin: 20% auto;
+        width: 95%;
+    }
+}
+
+/* Footer Styles */
+footer {
+    background: var(--secondary-color);
+    color: white;
+    text-align: center;
+    padding: 2rem;
+    margin-top: auto;
+    width: 100%;
+}
+
+/* Confetti Animation */
+@keyframes confetti {
+    0% { transform: translateY(0) rotate(0); }
+    100% { transform: translateY(-100vh) rotate(360deg); }
+}
+
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: var(--success-color);
+    animation: confetti 3s ease-in-out forwards;
+    z-index: 1001;
+} 

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share Food - SharePlate</title>
+    <link rel="stylesheet" href="../CSS/style.css">
+    <!-- Load Supabase first -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Then load config and client -->
+    <script src="../JS/config.js"></script>
+    <script src="../JS/supabaseClient.js"></script>
+    <!-- Finally load application scripts -->
+    <script src="../JS/newPost.js"></script>
+</head>
+<body>
+    <header>
+        <h1>SharePlate</h1>
+        <nav>
+            <a href="index.html">Browse</a>
+            <a href="new.html">Share Food</a>
+        </nav>
+    </header>
+
+    <main>
+        <form id="new-post-form">
+            <h2>Share Your Food</h2>
+            
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+            
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+            
+            <label for="address">Address:</label>
+            <textarea id="address" name="address" required></textarea>
+            
+            <label for="password">Create a Password (min 6 characters):</label>
+            <input type="password" id="password" name="password" minlength="6" required>
+            
+            <label for="image">Food Image (optional):</label>
+            <input type="file" id="image" name="image" accept="image/*">
+            
+            <button type="submit">Share Food</button>
+        </form>
+
+        <!-- Success Modal -->
+        <div id="success-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="success-message">
+                    <h2>🎉 Success!</h2>
+                    <p>You are helping a poor person!</p>
+                    <p>Remember your password to manage your post later.</p>
+                    <button id="close-success-modal" class="confetti-button">Close</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>SharePlate - Connecting people with surplus food</p>
+    </footer>
+
+    <script>
+        // Verify Supabase is loaded
+        if (typeof window.supabase === 'undefined') {
+            console.error('Supabase is not properly initialized');
+            alert('Error: Supabase is not properly initialized. Please refresh the page.');
+        }
+    </script>
+</body>
+</html> 
