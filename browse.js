@@ -4,8 +4,13 @@ async function fetchAndDisplayPosts() {
     postsContainer.innerHTML = '<p>Loading posts...</p>';
 
     try {
+        // Verify Supabase client is available
+        if (!window.supabase) {
+            throw new Error('Supabase client not initialized');
+        }
+
         // Fetch active posts from Supabase
-        const { data: posts, error } = await supabase
+        const { data: posts, error } = await window.supabase
             .from('posts')
             .select('post_id, title, description, address, image_url, created_at')
             .eq('is_active', true)
