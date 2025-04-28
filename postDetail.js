@@ -7,16 +7,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const postDetailsContainer = document.getElementById('post-details');
-    const passwordModal = document.getElementById('password-modal');
-    const passwordForm = document.getElementById('password-form');
-    const cancelButton = document.getElementById('cancel-button');
-
-    // Get the post ID from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const postId = urlParams.get('id');
 
     if (!postId) {
-        postDetailsContainer.innerHTML = '<p class="error-message">Invalid post ID.</p>';
+        postDetailsContainer.innerHTML = '<p>Error: No post ID provided. Please go back to the main page and try again.</p>';
         return;
     }
 
@@ -33,9 +28,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         postDetailsContainer.innerHTML = `
             <div class="post-details">
-                <h1 class="post-title">${post.title}</h1>
-                <p class="post-description"><strong>Description:</strong> ${post.description}</p>
-                <p class="post-address"><strong>Address:</strong> ${post.address}</p>
+                <h1>${post.title}</h1>
+                <p><strong>Description:</strong> ${post.description}</p>
+                <p><strong>Address:</strong> ${post.address}</p>
                 <div class="button-container">
                     <a href="index.html" class="button">Back to Browse</a>
                     <button id="edit-button" class="button">Edit</button>
@@ -46,35 +41,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Add event listener for the "Edit" button
         const editButton = document.getElementById('edit-button');
         editButton.addEventListener('click', () => {
-            passwordModal.style.display = 'block';
+            openPasswordModal(post);
         });
     } catch (err) {
         console.error('Error fetching post details:', err);
-        postDetailsContainer.innerHTML = '<p class="error-message">Error loading post. Please try again later.</p>';
+        postDetailsContainer.innerHTML = '<p>Error loading post. Please try again later.</p>';
     }
+});
 
-    // Handle cancel button click
-    cancelButton.addEventListener('click', () => {
-        passwordModal.style.display = 'none';
-    });
+// Function to open the password modal
+function openPasswordModal(post) {
+    const modal = document.getElementById('password-modal');
+    modal.style.display = 'block';
 
-    // Handle password form submission
-    passwordForm.addEventListener('submit', async (e) => {
+    const passwordForm = document.getElementById('password-form');
+    passwordForm.onsubmit = async (e) => {
         e.preventDefault();
 
         const password = document.getElementById('post-password').value;
-        const action = e.submitter.value;
+        const action = e.submitter.value; // "mark-taken" or "delete"
 
         try {
-            // First verify the password
-            const { data: post, error: verifyError } = await window.supabase
-                .from('posts')
-                .select('post_id')
-                .eq('post_id', postId)
-                .eq('password', password)
-                .single();
-
-            if (verifyError || !post) {
+            // Verify the password
+            if (post.password !== password) {
                 throw new Error('Incorrect password');
             }
 
@@ -83,31 +72,32 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const { error } = await window.supabase
                     .from('posts')
                     .update({ is_active: false })
-                    .eq('post_id', postId)
-                    .eq('password', password);
+                    .eq('post_id', post.post_id);
 
                 if (error) throw error;
                 alert('Post marked as taken successfully!');
+                modal.style.display = 'none';
                 window.location.reload();
             } else if (action === 'delete') {
                 // Delete post
                 const { error } = await window.supabase
                     .from('posts')
                     .delete()
-                    .eq('post_id', postId)
-                    .eq('password', password);
+                    .eq('post_id', post.post_id);
 
                 if (error) throw error;
                 alert('Post deleted successfully!');
+                modal.style.display = 'none';
                 window.location.href = 'index.html';
             }
-        } catch (error) {
-            alert(error.message || 'An error occurred. Please try again.');
-        } finally {
-            passwordModal.style.display = 'none';
+        } catch (err) {
+            alert(err.message || 'An error occurred. Please try again.');
         }
-    });
+    };
 
-    // Initialize
-    fetchPostDetails();
-});
+    // Handle cancel button click
+    const cancelButton = document.getElementById('cancel-button');
+    cancelButton.onclick = () => {
+        modal.style.display = 'none';
+    };
+}

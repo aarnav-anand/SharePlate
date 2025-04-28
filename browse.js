@@ -1,37 +1,37 @@
-// ...existing code...
-
-// Function to render posts
-function renderPosts(posts) {
+document.addEventListener('DOMContentLoaded', async () => {
     const postsContainer = document.getElementById('posts-container');
-    postsContainer.innerHTML = ''; // Clear existing posts
 
-    posts.forEach(post => {
-        const postElement = document.createElement('div');
-        postElement.classList.add('post');
+    try {
+        // Fetch posts from the Supabase database
+        const { data: posts, error } = await window.supabase
+            .from('posts')
+            .select('*');
 
-        postElement.innerHTML = `
-            <h2>${post.title}</h2>
-            <p>${post.description}</p>
-            <a href="post.html?id=${post.post_id}" class="view-details">View Details</a>
-        `;
+        if (error) {
+            console.error('Error fetching posts:', error);
+            postsContainer.innerHTML = '<p>Error loading posts. Please try again later.</p>';
+            return;
+        }
 
-        postsContainer.appendChild(postElement);
-    });
-}
+        if (!posts || posts.length === 0) {
+            postsContainer.innerHTML = '<p>No posts available at the moment.</p>';
+            return;
+        }
 
-// Fetch posts from Supabase
-async function fetchPosts() {
-    const { data: posts, error } = await window.supabase
-        .from('posts')
-        .select('*');
-
-    if (error) {
-        console.error('Error fetching posts:', error);
-        return;
+        // Dynamically insert posts into the container
+        postsContainer.innerHTML = posts
+            .map(
+                (post) => `
+                <div class="post">
+                    <h2>${post.title}</h2>
+                    <p>${post.description}</p>
+                    <a href="post.html?id=${post.post_id}" class="view-details">View Details</a>
+                </div>
+            `
+            )
+            .join('');
+    } catch (err) {
+        console.error('Error:', err);
+        postsContainer.innerHTML = '<p>Error loading posts. Please try again later.</p>';
     }
-
-    renderPosts(posts);
-}
-
-// Initialize
-fetchPosts();
+});
