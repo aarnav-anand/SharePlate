@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    // Check if Supabase client is initialized
+    if (!window.supabase) {
+        console.error('Supabase client not initialized');
+        document.getElementById('post-details').innerHTML = '<p>Error: Application not properly initialized. Please try again later.</p>';
+        return;
+    }
+
     const postDetails = document.getElementById('post-details');
     const editButton = document.getElementById('edit-button');
     const passwordModal = document.getElementById('password-modal');
@@ -10,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const postId = urlParams.get('id');
 
     if (!postId) {
-        postDetails.innerHTML = '<p>Post not found.</p>';
+        postDetails.innerHTML = '<p>Error: No post ID provided. Please go back to the main page and try again.</p>';
         return;
     }
 
@@ -18,14 +25,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Fetch post details
         const { data: post, error } = await window.supabase
             .from('posts')
-            .select('post_id, title, description, address, image_url, created_at, is_active')
+            .select('*')
             .eq('post_id', postId)
             .single();
 
-        if (error) {
-            console.error('Supabase error:', error);
-            throw error;
-        }
+        if (error) throw error;
 
         if (!post) {
             postDetails.innerHTML = '<p>Post not found.</p>';
