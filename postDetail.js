@@ -1,63 +1,57 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const postDetails = document.getElementById('post-details');
-    const editButton = document.getElementById('edit-button');
+    // Check if Supabase client is initialized
+    if (!window.supabase) {
+        console.error('Supabase client not initialized');
+        document.getElementById('post-details').innerHTML = '<p>Error: Application not properly initialized. Please try again later.</p>';
+        return;
+    }
+
+    const postDetailsContainer = document.getElementById('post-details');
     const passwordModal = document.getElementById('password-modal');
     const passwordForm = document.getElementById('password-form');
     const cancelButton = document.getElementById('cancel-button');
 
-    // Get post ID from URL
+    // Get the post ID from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const postId = urlParams.get('id');
 
     if (!postId) {
-        postDetails.innerHTML = '<p>Post not found.</p>';
+        postDetailsContainer.innerHTML = '<p class="error-message">Invalid post ID.</p>';
         return;
     }
 
     try {
-        // Fetch post details
         const { data: post, error } = await window.supabase
             .from('posts')
-            .select('post_id, title, description, address, image_url, created_at, is_active')
+            .select('*')
             .eq('post_id', postId)
             .single();
 
-        if (error) {
-            console.error('Supabase error:', error);
-            throw error;
+        if (error || !post) {
+            throw new Error('Post not found');
         }
 
-        if (!post) {
-            postDetails.innerHTML = '<p>Post not found.</p>';
-            return;
-        }
-
-        // Display post details
-        postDetails.innerHTML = `
-            <div class="post-card">
-                <h2>${post.title}</h2>
-                <p class="address">${post.address}</p>
-                <p class="description">${post.description}</p>
-                ${post.image_url ? `<img src="${post.image_url}" alt="${post.title}">` : ''}
-                <p class="timestamp">Posted on: ${new Date(post.created_at).toLocaleString()}</p>
-                ${post.is_active ? '' : '<p class="status">This food has been taken.</p>'}
+        postDetailsContainer.innerHTML = `
+            <div class="post-details">
+                <h1 class="post-title">${post.title}</h1>
+                <p class="post-description"><strong>Description:</strong> ${post.description}</p>
+                <p class="post-address"><strong>Address:</strong> ${post.address}</p>
+                <div class="button-container">
+                    <a href="index.html" class="button">Back to Browse</a>
+                    <button id="edit-button" class="button">Edit</button>
+                </div>
             </div>
         `;
 
-        // Show edit button if post is active
-        if (post.is_active) {
-            editButton.style.display = 'block';
-        }
-
-    } catch (error) {
-        console.error('Error fetching post:', error);
-        postDetails.innerHTML = '<p>Error loading post. Please try again later.</p>';
+        // Add event listener for the "Edit" button
+        const editButton = document.getElementById('edit-button');
+        editButton.addEventListener('click', () => {
+            passwordModal.style.display = 'block';
+        });
+    } catch (err) {
+        console.error('Error fetching post details:', err);
+        postDetailsContainer.innerHTML = '<p class="error-message">Error loading post. Please try again later.</p>';
     }
-
-    // Handle edit button click
-    editButton.addEventListener('click', () => {
-        passwordModal.style.display = 'block';
-    });
 
     // Handle cancel button click
     cancelButton.addEventListener('click', () => {
@@ -107,13 +101,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 alert('Post deleted successfully!');
                 window.location.href = 'index.html';
             }
-
-            // Close modal
-            passwordModal.style.display = 'none';
-
         } catch (error) {
-            console.error('Error managing post:', error);
-            alert('Error: ' + error.message);
+            alert(error.message || 'An error occurred. Please try again.');
+        } finally {
+            passwordModal.style.display = 'none';
         }
     });
-}); 
+
+    // Initialize
+    fetchPostDetails();
+});

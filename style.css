@@ -222,7 +222,21 @@ form button[type="submit"] {
     box-shadow: var(--box-shadow);
     transition: var(--transition);
 }
+/* Styling for individual posts */
+.post {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px; /* Curved edges */
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for a modern look */
+    margin-bottom: 20px; /* Add space after each post */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
+.post:hover {
+    transform: translateY(-5px); /* Slight lift on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
 .post-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
@@ -422,4 +436,57 @@ footer {
     background: var(--success-color);
     animation: confetti 3s ease-in-out forwards;
     z-index: 1001;
-} 
+}
+
+/* General styles for post details */
+.post-details {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    margin: 20px auto;
+    max-width: 600px;
+    text-align: left;
+}
+
+.post-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.post-description {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.post-location,
+.post-contact {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+/* Button styling */
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #007bff;
+    text-decoration: none;
+    border-radius: 4px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+/* Error message styling */
+.error-message {
+    color: red;
+    font-size: 16px;
+    text-align: center;
+    margin-top: 20px;
+}

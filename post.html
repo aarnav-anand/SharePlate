@@ -3,16 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Post - SharePlate</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Post Details</title>
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
     <script src="supabaseClient.js"></script>
-    <script src="viewPost.js"></script>
+    <script src="postDetail.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
+<style>
+    /* General font styling for all pages */
+    body {
+        font-family: 'Roboto', Arial, sans-serif; /* Use a modern, clean font */
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #f0f8ff, #e6e6fa); /* Consistent gradient background */
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Styling for the posts container */
+    #posts-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px; /* Add spacing between posts */
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto; /* Center the posts container */
+    }
+
+    /* Styling for individual posts */
+    .post {
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px; /* Curved edges */
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for a modern look */
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .post:hover {
+        transform: translateY(-5px); /* Slight lift on hover */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+    }
+
+    .post h2 {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .post p {
+        font-size: 16px;
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .view-details {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 20px;
+        font-size: 14px;
+        color: #fff;
+        background-color: #007bff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .view-details:hover {
+        background-color: #0056b3;
+    }
+
+    /* Ensure the content is centered and styled properly */
+    main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    footer {
+        text-align: center;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.1);
+        color: #555;
+    }
+
+    /* General styles for post details */
+    .post-details {
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        margin: 20px auto;
+        max-width: 600px;
+        text-align: left;
+    }
+
+    .post-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .post-description {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    /* Button styling */
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 14px;
+        color: #fff;
+        background-color: #007bff;
+        text-decoration: none;
+        border-radius: 4px;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Error message styling */
+    .error-message {
+        color: red;
+        font-size: 16px;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    /* Modal Styles */
+    #password-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+    }
+
+    .modal-content h2 {
+        margin-bottom: 15px;
+        font-size: 20px;
+    }
+
+    .modal-content input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .modal-content .button {
+        margin: 5px;
+    }
+
+    .button-container {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+</style>
 <body>
     <header>
-        <h1>SharePlate</h1>
+        <h1>Post Details</h1>
         <nav>
             <a href="index.html">Browse</a>
             <a href="new.html">Share Food</a>
@@ -24,20 +201,15 @@
             <!-- Post details will be dynamically inserted here -->
         </div>
 
-        <!-- Edit Button -->
-        <button id="edit-button" class="edit-button" style="display: none;">Edit Post</button>
-
         <!-- Password Modal -->
-        <div id="password-modal" class="modal" style="display: none;">
+        <div id="password-modal" style="display: none;">
             <div class="modal-content">
                 <h2>Enter Password</h2>
                 <form id="password-form">
-                    <input type="password" id="post-password" placeholder="Enter your password" required>
-                    <div class="modal-buttons">
-                        <button type="submit" name="action" value="mark-taken">Mark as Taken</button>
-                        <button type="submit" name="action" value="delete">Delete Post</button>
-                        <button type="button" id="cancel-button">Cancel</button>
-                    </div>
+                    <input type="password" id="post-password" placeholder="Enter password" required>
+                    <button type="submit" value="mark-taken" class="button">Mark as Taken</button>
+                    <button type="submit" value="delete" class="button">Delete Post</button>
+                    <button type="button" id="cancel-button" class="button">Cancel</button>
                 </form>
             </div>
         </div>
@@ -47,4 +219,4 @@
         <p>SharePlate - Connecting people with surplus food</p>
     </footer>
 </body>
-</html> 
+</html>
