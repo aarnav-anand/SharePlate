@@ -18,36 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const description = document.getElementById('description').value;
         const address = document.getElementById('address').value;
         const password = document.getElementById('password').value;
-        const imageFile = document.getElementById('image').files[0];
+        console.log('Form submitted with values:', { title, description, address, password });
 
         try {
-            let imageUrl = null;
-
-            // Upload image if provided
-            if (imageFile) {
-                console.log('Starting image upload...');
-                const fileExt = imageFile.name.split('.').pop();
-                const fileName = `${Math.random()}.${fileExt}`;
-                
-                const { data: uploadData, error: uploadError } = await window.supabase.storage
-                    .from('food-images')
-                    .upload(fileName, imageFile);
-
-                if (uploadError) {
-                    console.error('Image upload error:', uploadError);
-                    throw uploadError;
-                }
-
-                console.log('Image uploaded successfully:', uploadData);
-
-                const { data: { publicUrl } } = window.supabase.storage
-                    .from('food-images')
-                    .getPublicUrl(fileName);
-
-                imageUrl = publicUrl;
-                console.log('Image URL:', imageUrl);
-            }
-
             // Insert post into database
             console.log('Starting post creation...');
             const { data: post, error } = await window.supabase
@@ -57,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         title,
                         description,
                         address,
-                        image_url: imageUrl,
                         is_active: true,
                         password: password
                     }
@@ -81,4 +53,4 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(`Error creating post: ${error.message}. Please try again.`);
         }
     });
-}); 
+});
