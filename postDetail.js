@@ -1,11 +1,4 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // Check if Supabase client is initialized
-    if (!window.supabase) {
-        console.error('Supabase client not initialized');
-        document.getElementById('post-details').innerHTML = '<p>Error: Application not properly initialized. Please try again later.</p>';
-        return;
-    }
-
     const postDetailsContainer = document.getElementById('post-details');
     const urlParams = new URLSearchParams(window.location.search);
     const postId = urlParams.get('id');
@@ -59,27 +52,21 @@ function openPasswordModal(post) {
         e.preventDefault();
 
         const password = document.getElementById('post-password').value;
-        const action = e.submitter.value; // "mark-taken" or "delete"
+        console.log('Password entered:', password);
+        console.log('Post password:', post.password);
+
+        const action = e.submitter.value; // Only "delete" remains
+        console.log('Action:', action);
 
         try {
             // Verify the password
             if (post.password !== password) {
+                console.log('Incorrect password');
                 throw new Error('Incorrect password');
             }
 
-            if (action === 'mark-taken') {
-                // Mark post as taken
-                const { error } = await window.supabase
-                    .from('posts')
-                    .update({ is_active: false })
-                    .eq('post_id', post.post_id);
-
-                if (error) throw error;
-                alert('Post marked as taken successfully!');
-                modal.style.display = 'none';
-                window.location.reload();
-            } else if (action === 'delete') {
-                // Delete post
+            if (action === 'delete') {
+                console.log('Deleting post...');
                 const { error } = await window.supabase
                     .from('posts')
                     .delete()
@@ -91,11 +78,11 @@ function openPasswordModal(post) {
                 window.location.href = 'index.html';
             }
         } catch (err) {
+            console.error('Error:', err);
             alert(err.message || 'An error occurred. Please try again.');
         }
     };
 
-    // Handle cancel button click
     const cancelButton = document.getElementById('cancel-button');
     cancelButton.onclick = () => {
         modal.style.display = 'none';
