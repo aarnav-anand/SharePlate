@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const postsContainer = document.getElementById('posts-container');
 
     try {
-        // Fetch posts from the Supabase database
         const { data: posts, error } = await window.supabase
             .from('posts')
             .select('*');
@@ -18,13 +17,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // Dynamically insert posts into the container
         postsContainer.innerHTML = posts
             .map(
                 (post) => `
                 <div class="post">
                     <h2>${post.title}</h2>
                     <p>${post.description}</p>
+                    <p><strong>Status:</strong> ${post.is_booked ? '<strong>Booked</strong>' : '<strong>Not Booked</strong>'}</p>
                     <a href="post.html?id=${post.post_id}" class="view-details">View Details</a>
                 </div>
             `

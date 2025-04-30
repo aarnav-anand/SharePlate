@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const postDetailsContainer = document.getElementById('post-details');
+    const bookFoodButton = document.getElementById('book-food-button');
     const urlParams = new URLSearchParams(window.location.search);
     const postId = urlParams.get('id');
 
@@ -19,22 +20,42 @@ document.addEventListener('DOMContentLoaded', async () => {
             throw new Error('Post not found');
         }
 
+        // Display post details
         postDetailsContainer.innerHTML = `
             <div class="post-details">
                 <h1>${post.title}</h1>
                 <p><strong>Description:</strong> ${post.description}</p>
                 <p><strong>Address:</strong> ${post.address}</p>
+                <p><strong>Status:</strong> ${post.is_booked ? 'Booked' : 'Not Booked'}</p>
                 <div class="button-container">
                     <a href="index.html" class="button">Back to Browse</a>
-                    <button id="edit-button" class="button">Edit</button>
                 </div>
             </div>
         `;
 
-        // Add event listener for the "Edit" button
-        const editButton = document.getElementById('edit-button');
-        editButton.addEventListener('click', () => {
-            openPasswordModal(post);
+        // Hide the "Book Food" button if the post is already booked
+        if (post.is_booked) {
+            bookFoodButton.style.display = 'none';
+        }
+
+        // Add event listener for the "Book Food" button
+        bookFoodButton.addEventListener('click', async () => {
+            try {
+                const { error: updateError } = await window.supabase
+                    .from('posts')
+                    .update({ is_booked: true })
+                    .eq('post_id', postId);
+
+                if (updateError) {
+                    throw updateError;
+                }
+
+                alert('Food successfully booked!');
+                window.location.reload(); // Reload the page to reflect the updated status
+            } catch (err) {
+                console.error('Error booking food:', err);
+                alert('Failed to book food. Please try again.');
+            }
         });
     } catch (err) {
         console.error('Error fetching post details:', err);
